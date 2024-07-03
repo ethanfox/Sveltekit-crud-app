@@ -1,10 +1,20 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table';
+	import { Button } from '$lib/components/ui/button';
+	import { goto } from '$app/navigation';
 
 	let { data } = $props();
 </script>
 
-<div class="mx-auto mt-8 max-w-3xl px-4 sm:px-6 lg:px-8">
+<div class="mx-auto mt-8 flex max-w-3xl flex-col gap-4 px-4 sm:px-6 lg:px-8">
+	<div class="space-y-6 rounded-md border p-4">
+		<p class="text-xl font-semibold">Ethan Fox</p>
+		<p>ethan@ethanjamesfox.com</p>
+
+		<Button on:click={() => goto('/users')} class="mt-8 w-full bg-red-400"
+			>View Ethan Fox's Submission</Button
+		>
+	</div>
 	<div class="space-y-6 rounded-md border p-4">
 		<p>
 			Welcome to the Careswitch take-home assignment! If you followed the quickstart guide in the

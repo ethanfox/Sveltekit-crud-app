@@ -8,6 +8,24 @@ generator client {
 }
 
 model User {
-  id   String @id @default(cuid())
-  name String
+  id         String          @id @default(cuid())
+  name       String
+  workspaces UserWorkspace[]
+}
+
+model Workspace {
+  id    String          @id @default(cuid())
+  name  String
+  color String
+  users UserWorkspace[]
+}
+
+model UserWorkspace {
+  userId      String
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@id([userId, workspaceId])
 }
