@@ -7,7 +7,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 
 export const load: PageServerLoad = async () => {
 	const users = await prisma.user.findMany();
-	//const workspaces = await prisma.workspace.findMany();
+
 	const createUserForm = await superValidate(zod(userSchema));
 	const workspaces = await prisma.workspace.findMany({
 		select: {
@@ -29,7 +29,6 @@ export const actions: Actions = {
 			// Get the form data first
 			const formData = await event.request.formData();
 
-			// Now pass the formData to superValidate
 			const form = await superValidate(formData, zod(userSchema));
 
 			console.log('Parsed form:', form);
@@ -42,14 +41,11 @@ export const actions: Actions = {
 			const newUser = await prisma.user.create({
 				data: {
 					name: form.data.name
-
-					// Update other fields as needed
 				}
 			});
 
 			console.log('New user:', newUser);
 
-			// return message(form, 'User updated successfully');
 			return { form, message: 'Workspace created successfully' };
 		} catch (error) {
 			console.error('Error creating workspace:', error);

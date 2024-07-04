@@ -23,7 +23,7 @@
 					Assign users to multiple workspaces<br />
 					<span class="text-slate-400"> Duplicates are prevented</span>
 				</li>
-				<li>Manage members of a workspace</li>
+				<li>Manage a user's workspaces</li>
 				<li>Manage a workspace's members</li>
 			</ul>
 		</div>
