@@ -5,10 +5,11 @@ import type { PageServerLoad, Actions } from './$types';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { workspaceSchema } from '$lib/schemas.js';
-
+const crudSchema = workspaceSchema.extend({
+	id: workspaceSchema.shape.id.optional()
+});
 export const load = async ({ params }) => {
 	const workspaceId = params.id;
-	console.log('params.id:', params.id); // Log the ID for debugging
 	const workspace = await prisma.workspace.findUnique({
 		where: {
 			id: workspaceId // Fetch workspace by ID
@@ -21,8 +22,9 @@ export const load = async ({ params }) => {
 			error: new Error('Workspace not found')
 		};
 	}
-	const form = await superValidate(workspace, zod(workspaceSchema));
-	return { form, workspace };
+	// const form = await superValidate(workspace, zod(workspaceSchema));
+	const updateWorkspaceForm = await superValidate(workspace, zod(workspaceSchema));
+	return { updateWorkspaceForm, workspace };
 };
 
 export const actions: Actions = {
@@ -55,6 +57,37 @@ export const actions: Actions = {
 		} catch (error) {
 			console.error('Error updating workspace:', error);
 			return fail(500, { message: 'Failed to update workspace' });
+		}
+	},
+	deleteWorkspace: async ({ request, fetch }) => {
+		const formData = await request.formData();
+		const workspaceId = formData.get('id') as string;
+		const form = await superValidate(formData, zod(crudSchema));
+
+		try {
+			const response = await fetch('/api/deleteWorkspace', {
+				method: 'POST',
+				body: JSON.stringify({ workspaceId }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				throw redirect(303, '/workspaces');
+				return {
+					location: '/workspaces',
+					form,
+					success: true
+				};
+			} else {
+				return fail(500, { form, message: 'Failed to delete workspace' });
+			}
+		} catch (error) {
+			console.error('Error deleting workspace:', error);
+			return fail(500, { form, message: 'An error occurred while deleting the workspace' });
 		}
 	}
 };

@@ -39,57 +39,61 @@
 </script>
 
 <div>
-	<ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2">
-		{#each data.workspaces as workspace (workspace.id)}
-			<li class="col-span-1 flex w-full rounded-md shadow-sm">
-				<a class="flex w-full" href="/workspace/{workspace.id}">
-					<div
-						class="flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
-						style="background-color: {workspace.color};"
-					></div>
-					<div
-						class="flex flex-1 items-center justify-between border-b border-t border-slate-700 transition-all hover:bg-slate-900/80"
-					>
-						<div class="flex-1 px-4 py-2 text-sm">
-							<p class="font-medium transition-all hover:text-slate-600">{workspace.name}</p>
+	{#if data.workspaces.length === 0}
+		<p class="text-slate">No workspaces found.</p>
+	{:else}
+		<ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2">
+			{#each data.workspaces as workspace (workspace.id)}
+				<li class="col-span-1 flex w-full rounded-md shadow-sm">
+					<a class="flex w-full" href="/workspace/{workspace.id}">
+						<div
+							class="flex w-16 flex-shrink-0 items-center justify-center rounded-l-md text-sm font-medium text-white"
+							style="background-color: {workspace.color};"
+						></div>
+						<div
+							class="flex flex-1 items-center justify-between border-b border-t border-slate-700 transition-all hover:bg-slate-900/80"
+						>
+							<div class="flex-1 px-4 py-2 text-sm">
+								<p class="font-medium transition-all hover:text-slate-600">{workspace.name}</p>
 
-							<p class="text-slate-500">{workspace._count?.users ?? 0} Members</p>
+								<p class="text-slate-500">{workspace._count?.users ?? 0} Members</p>
+							</div>
 						</div>
+					</a>
+
+					<div class="flex flex-shrink-0 rounded-r-md border-b border-r border-t border-slate-700">
+						<DropdownMenu.Root>
+							<DropdownMenu.Trigger asChild let:builder>
+								<Button
+									class="my-auto h-full w-full rounded-l-none rounded-r-md"
+									builders={[builder]}
+									variant="ghost"
+									><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+										<path
+											d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+										/>
+									</svg></Button
+								>
+							</DropdownMenu.Trigger>
+							<DropdownMenu.Content class="w-56">
+								<DropdownMenu.Label>Quick Actions</DropdownMenu.Label>
+								<DropdownMenu.Separator />
+
+								<DropdownMenu.Item on:click={() => openAddToWorkspaceAlert(workspace.id)}>
+									<CirclePlus class="mr-2 h-4 w-4" />
+									<span>Add User</span>
+								</DropdownMenu.Item>
+								<DropdownMenu.Item on:click={() => openDeleteAlert(workspace.id)}>
+									<Trash class="mr-2 h-4 w-4" />
+									<span>Delete Workspace</span>
+								</DropdownMenu.Item>
+							</DropdownMenu.Content>
+						</DropdownMenu.Root>
 					</div>
-				</a>
-
-				<div class="flex flex-shrink-0 rounded-r-md border-b border-r border-t border-slate-700">
-					<DropdownMenu.Root>
-						<DropdownMenu.Trigger asChild let:builder>
-							<Button
-								class="my-auto h-full w-full rounded-l-none rounded-r-md"
-								builders={[builder]}
-								variant="ghost"
-								><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-									<path
-										d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-									/>
-								</svg></Button
-							>
-						</DropdownMenu.Trigger>
-						<DropdownMenu.Content class="w-56">
-							<DropdownMenu.Label>Quick Actions</DropdownMenu.Label>
-							<DropdownMenu.Separator />
-
-							<DropdownMenu.Item on:click={() => openAddToWorkspaceAlert(workspace.id)}>
-								<CirclePlus class="mr-2 h-4 w-4" />
-								<span>Add User</span>
-							</DropdownMenu.Item>
-							<DropdownMenu.Item on:click={() => openDeleteAlert(workspace.id)}>
-								<Trash class="mr-2 h-4 w-4" />
-								<span>Delete Workspace</span>
-							</DropdownMenu.Item>
-						</DropdownMenu.Content>
-					</DropdownMenu.Root>
-				</div>
-			</li>
-		{/each}
-	</ul>
+				</li>
+			{/each}
+		</ul>
+	{/if}
 </div>
 
 <AlertDialog bind:open={showDeleteAlert}>

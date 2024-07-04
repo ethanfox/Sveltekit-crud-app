@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
 	import type { Selected } from 'bits-ui';
@@ -8,21 +7,35 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import Trash from 'lucide-svelte/icons/trash-2';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import { goto } from '$app/navigation';
+	import { Root } from 'postcss';
 
 	export let data: SuperValidated<Infer<WorkspaceSchema>>;
 
+	let showDeleteAlert = false;
+
 	const form = superForm(data, {
-		validators: zodClient(workspaceSchema)
-	});
-
-	const { form: formData, errors, enhance } = form;
-
-	export function submitForm() {
-		const formElement = document.querySelector('form');
-		if (formElement) {
-			formElement.requestSubmit();
+		id: 'workspace-detail-form',
+		validators: zodClient(workspaceSchema),
+		onUpdated(event) {
+			data = event.form.data;
+			$formData = event.form.data;
 		}
-	}
+	});
+	const { form: formData, errors, enhance: updateEnhance } = form;
+
+	const deleteForm = superForm(data, {
+		id: 'workspace-delete-form',
+		validators: zodClient(workspaceSchema),
+		onUpdated(event) {
+			console.log('DELETE FORM UPDATED', event);
+			goto('/workspaces');
+		}
+	});
+	const { form: deleteFormData, enhance: deleteEnhance } = deleteForm;
+	console.log('DELETE', $deleteFormData);
 
 	function handleColorSelect(selected: Selected<string> | undefined) {
 		if (selected) {
@@ -48,17 +61,15 @@
 			selected = { value: value.color, label: selectedColorLabel };
 		});
 	}
-
-	import { goto } from '$app/navigation';
 </script>
 
-<form action="?/updateWorkspace" method="POST" use:enhance>
+<form action="?/updateWorkspace" method="POST" use:updateEnhance>
 	<div class="flex flex-col gap-4">
 		<Form.Field {form} name="id">
 			<Form.Control let:attrs>
 				<Input type="hidden" {...attrs} bind:value={$formData.id} />
-			</Form.Control></Form.Field
-		>
+			</Form.Control>
+		</Form.Field>
 
 		<Form.Field {form} name="name">
 			<Form.Control let:attrs>
@@ -101,8 +112,33 @@
 	</div>
 
 	<div class="mt-6 flex w-full justify-end gap-4">
-		<!-- <Button variant="destructive" on:click={() => (showDeleteAlert = true)}>Delete Workspace</Button
-		> -->
+		<Button variant="destructive" on:click={() => (showDeleteAlert = true)}
+			><div class="flex gap-2">
+				<Trash class="size-5" />Delete Workspace
+			</div></Button
+		>
 		<Button type="submit">Update Workspace</Button>
 	</div>
 </form>
+
+<AlertDialog.Root bind:open={showDeleteAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Delete Workspace</AlertDialog.Title>
+			<AlertDialog.Description>
+				Are you sure you want to delete this workspace? This action cannot be undone.
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<form method="POST" action="?/deleteWorkspace" id="deleteWorkspace" use:deleteEnhance>
+			<Form.Field {form} name="id">
+				<Form.Control let:attrs>
+					<Input type="hidden" {...attrs} bind:value={$deleteFormData.id} />
+				</Form.Control>
+			</Form.Field>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel on:click={() => (showDeleteAlert = false)}>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action class="bg-red-800 text-white" type="submit">Delete</AlertDialog.Action>
+			</AlertDialog.Footer>
+		</form>
+	</AlertDialog.Content>
+</AlertDialog.Root>

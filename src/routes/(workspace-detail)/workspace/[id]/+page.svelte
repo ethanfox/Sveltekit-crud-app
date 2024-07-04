@@ -1,19 +1,12 @@
 <script lang="ts">
 	import WorkspaceDetailForm from '../../components/workspace-detail-form.svelte';
-	import { superForm } from 'sveltekit-superforms';
 	import { Separator } from '$lib/components/ui/separator';
 	export let data: any;
-	console.log('DATA', data);
-	let workspace = data?.workspace;
 
-	const { message: formMessage } = superForm(data.form, {
-		resetForm: false,
-		onUpdated(event) {
-			if (data?.workspace) {
-				workspace = data.workspace;
-			}
-		}
-	});
+	// console.log('DATA', data);
+	// let workspace = data?.workspace;
+
+	$: workspace = data.updateWorkspaceForm.data;
 </script>
 
 <div class="mx-auto my-8 flex max-w-3xl flex-col gap-4">
@@ -40,4 +33,4 @@
 	<Separator />
 </div>
 
-<WorkspaceDetailForm data={data.form} />
+<WorkspaceDetailForm data={data.updateWorkspaceForm} />
