@@ -20,8 +20,6 @@ export const load: PageServerLoad = async () => {
 		}
 	});
 
-	console.log('Workspaces:', workspaces);
-
 	return { users, workspaces, createUserForm };
 };
 

@@ -1,9 +1,10 @@
 import { prisma } from '$lib/server/db';
 import { fail } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import type { Actions } from './$types';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { userSchema } from '$lib/schemas.js';
+import { redirect } from '@sveltejs/kit';
 
 const crudSchema = userSchema.extend({
 	id: userSchema.shape.id.optional()
@@ -11,14 +12,11 @@ const crudSchema = userSchema.extend({
 
 export const load = async ({ params }) => {
 	const userId = params.id;
-
 	const user = await prisma.user.findUnique({
 		where: {
 			id: userId
 		}
 	});
-
-	console.log('user:', user);
 
 	if (!user) {
 		return {
@@ -26,12 +24,12 @@ export const load = async ({ params }) => {
 			error: new Error('User not found')
 		};
 	}
-	const form = await superValidate(user, zod(crudSchema));
-	return { form, user };
+	const updateUserForm = await superValidate(user, zod(userSchema));
+	return { updateUserForm, user };
 };
 
 export const actions: Actions = {
-	default: async (event) => {
+	updateUser: async (event) => {
 		try {
 			// Get the form data first
 			const formData = await event.request.formData();
@@ -60,6 +58,32 @@ export const actions: Actions = {
 		} catch (error) {
 			console.error('Error updating user:', error);
 			return fail(500, { message: 'Failed to update user' });
+		}
+	},
+	deleteUser: async ({ request, fetch }) => {
+		const formData = await request.formData();
+		const userId = formData.get('id') as string;
+		const form = await superValidate(formData, zod(crudSchema));
+
+		try {
+			const response = await fetch('/api/deleteUser', {
+				method: 'POST',
+				body: JSON.stringify({ userId }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				throw redirect(303, '/users');
+			} else {
+				return fail(500, { form, message: 'Failed to delete user' });
+			}
+		} catch (error) {
+			console.error('Error deleting user:', error);
+			return fail(500, { form, message: 'An error occurred while deleting user' });
 		}
 	}
 };

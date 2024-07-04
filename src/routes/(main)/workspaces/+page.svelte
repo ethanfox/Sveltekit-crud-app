@@ -2,15 +2,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import CreateWorkspaceForm from './components/create-workspace-form.svelte';
 	import Plus from 'lucide-svelte/icons/plus';
-	import {
-		AlertDialog,
-		AlertDialogTrigger,
-		AlertDialogTitle,
-		AlertDialogDescription,
-		AlertDialogContent,
-		AlertDialogHeader
-	} from '$lib/components/ui/alert-dialog';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import WorkspaceTable from './components/workspace-table.svelte';
+
 	let createWorkspaceForm: any;
 
 	let { data } = $props();
@@ -28,28 +22,28 @@
 		<div class="mb-4 flex w-full justify-between">
 			<h1 class="text-2xl font-semibold">Workspaces</h1>
 
-			<AlertDialog bind:open={showDialog}>
-				<AlertDialogTrigger>
+			<AlertDialog.Root bind:open={showDialog}>
+				<AlertDialog.Trigger>
 					<Button>
 						<Plus class="mr-2 h-4 w-4" />
 						Create Workspace
 					</Button>
-				</AlertDialogTrigger>
+				</AlertDialog.Trigger>
 
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>Create Workspace</AlertDialogTitle>
-						<AlertDialogDescription>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Create Workspace</AlertDialog.Title>
+						<AlertDialog.Description>
 							Enter a name and select a color for your new workspace.
-						</AlertDialogDescription>
-					</AlertDialogHeader>
+						</AlertDialog.Description>
+					</AlertDialog.Header>
 					<CreateWorkspaceForm
 						bind:this={createWorkspaceForm}
 						data={data.createWorkspaceForm}
 						onSubmitSuccess={handleFormSubmitted}
 					/>
-				</AlertDialogContent>
-			</AlertDialog>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
 		</div>
 
 		<WorkspaceTable {data} />

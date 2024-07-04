@@ -1,10 +1,11 @@
 import { prisma } from '$lib/server/db';
 import { redirect } from '@sveltejs/kit';
 import { fail } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import type { Actions } from './$types';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { workspaceSchema } from '$lib/schemas.js';
+
 const crudSchema = workspaceSchema.extend({
 	id: workspaceSchema.shape.id.optional()
 });
@@ -77,11 +78,6 @@ export const actions: Actions = {
 
 			if (result.success) {
 				throw redirect(303, '/workspaces');
-				return {
-					location: '/workspaces',
-					form,
-					success: true
-				};
 			} else {
 				return fail(500, { form, message: 'Failed to delete workspace' });
 			}

@@ -72,13 +72,15 @@
 						<Select.Group>
 							<Select.Label>Workspace Color</Select.Label>
 							{#each colors as color}
-								<div class="flex gap-2">
-									<div
-										class="my-auto size-3 flex-none rounded-full"
-										style="background-color: {color.value};"
-									></div>
-									<Select.Item value={color.value} label={color.label}>{color.label}</Select.Item>
-								</div>
+								<Select.Item value={color.value} label={color.label}>
+									<div class="flex gap-2">
+										<div
+											class="my-auto size-3 flex-none rounded-full"
+											style="background-color: {color.value};"
+										></div>
+										{color.label}
+									</div>
+								</Select.Item>
 							{/each}
 						</Select.Group>
 					</Select.Content>

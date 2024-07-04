@@ -1,27 +1,6 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
-
-	import Plus from 'lucide-svelte/icons/plus';
-	import {
-		AlertDialog,
-		AlertDialogTrigger,
-		AlertDialogTitle,
-		AlertDialogDescription,
-		AlertDialogContent,
-		AlertDialogHeader
-	} from '$lib/components/ui/alert-dialog';
 	import WorkspaceTable from './components/workspace-table.svelte';
-	let createWorkspaceForm: any;
-
 	let { data } = $props();
-	console.log('data', data);
-
-	let showDialog = $state(false);
-
-	function handleFormSubmitted() {
-		console.log('Form submitted');
-		showDialog = false;
-	}
 </script>
 
 <div class=" mt-8 flex flex-col">

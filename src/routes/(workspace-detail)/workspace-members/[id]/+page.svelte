@@ -4,16 +4,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import { Button } from '$lib/components/ui/button';
 	import AddUserToWorkspaceForm from './components/add-user-to-workspace-form.svelte';
-	import {
-		AlertDialog,
-		AlertDialogFooter,
-		AlertDialogTitle,
-		AlertDialogDescription,
-		AlertDialogContent,
-		AlertDialogHeader,
-		AlertDialogCancel,
-		AlertDialogAction
-	} from '$lib/components/ui/alert-dialog';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import type { UserSchema } from '$lib/schemas';
 
 	let { data } = $props();
@@ -26,8 +17,7 @@
 	let showAddToWorkSpaceAlert = $state(false);
 	function openAddToWorkspaceAlert() {
 		showAddToWorkSpaceAlert = true;
-	}    
-	
+	}
 
 	function handleRemoveClick(user: UserSchema) {
 		console.log('Remove user', user);
@@ -82,14 +72,14 @@
 	</div>
 </div>
 
-<AlertDialog bind:open={showRemoveAlert}>
-	<AlertDialogContent>
-		<AlertDialogHeader>
-			<AlertDialogTitle>Remove from Workspace</AlertDialogTitle>
-			<AlertDialogDescription>
+<AlertDialog.Root bind:open={showRemoveAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Remove from Workspace</AlertDialog.Title>
+			<AlertDialog.Description>
 				Are you sure you want to remove the user from this workspace?
-			</AlertDialogDescription>
-		</AlertDialogHeader>
+			</AlertDialog.Description>
+		</AlertDialog.Header>
 		<form method="POST" action="?/removeUserFromWorkspace" id="removeUserFromWorkspace" use:enhance>
 			<div class="mb-4 flex justify-between rounded-md border p-3">
 				<p class=" font-semibold">{selectedUser?.name}</p>
@@ -97,24 +87,24 @@
 			</div>
 			<input type="hidden" name="workspaceId" value={data.workspace?.id} />
 			<input type="hidden" name="userId" value={selectedUser?.id ?? ''} />
-			<AlertDialogFooter>
-				<AlertDialogCancel on:click={() => (showRemoveAlert = false)}>Cancel</AlertDialogCancel>
-				<AlertDialogAction class="bg-red-800 text-white" type="submit">Delete</AlertDialogAction>
-			</AlertDialogFooter>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel on:click={() => (showRemoveAlert = false)}>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action class="bg-red-800 text-white" type="submit">Delete</AlertDialog.Action>
+			</AlertDialog.Footer>
 		</form>
-	</AlertDialogContent>
-</AlertDialog>
+	</AlertDialog.Content>
+</AlertDialog.Root>
 
-<AlertDialog bind:open={showAddToWorkSpaceAlert}>
-	<AlertDialogContent>
-		<AlertDialogHeader>
-			<AlertDialogTitle>Add to Workspace</AlertDialogTitle>
-		</AlertDialogHeader>
+<AlertDialog.Root bind:open={showAddToWorkSpaceAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Add to Workspace</AlertDialog.Title>
+		</AlertDialog.Header>
 		<AddUserToWorkspaceForm
 			data={data.addUsersForm}
 			workspaceId={data.workspace?.id ?? ''}
 			users={data.users}
 			onSubmitSuccess={handleAddtoWorkspaceFormSubmit}
 		/>
-	</AlertDialogContent>
-</AlertDialog>
+	</AlertDialog.Content>
+</AlertDialog.Root>

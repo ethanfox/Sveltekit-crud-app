@@ -10,6 +10,23 @@
 	<div class="space-y-6 rounded-md border p-4">
 		<p class="text-xl font-semibold">Ethan Fox</p>
 		<p>ethan@ethanjamesfox.com</p>
+		<div class="space-y-4">
+			<p class=" font-semibold">What You Can Do:</p>
+			<ul class="list-disc space-y-2 pl-6">
+				<li>
+					Create, Read, Update and Delete as specified below.<br />
+					<span class="text-slate-400">
+						Database makes use of cascade to propagate updates to related records</span
+					>
+				</li>
+				<li>
+					Assign users to multiple workspaces<br />
+					<span class="text-slate-400"> Duplicates are prevented</span>
+				</li>
+				<li>Manage members of a workspace</li>
+				<li>Manage a workspace's members</li>
+			</ul>
+		</div>
 
 		<Button on:click={() => goto('/users')} class="mt-8 w-full bg-red-400"
 			>View Ethan Fox's Submission</Button

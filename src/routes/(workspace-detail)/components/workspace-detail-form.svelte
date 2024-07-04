@@ -10,7 +10,6 @@
 	import Trash from 'lucide-svelte/icons/trash-2';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { goto } from '$app/navigation';
-	import { Root } from 'postcss';
 
 	export let data: SuperValidated<Infer<WorkspaceSchema>>;
 
@@ -30,12 +29,10 @@
 		id: 'workspace-delete-form',
 		validators: zodClient(workspaceSchema),
 		onUpdated(event) {
-			console.log('DELETE FORM UPDATED', event);
 			goto('/workspaces');
 		}
 	});
 	const { form: deleteFormData, enhance: deleteEnhance } = deleteForm;
-	console.log('DELETE', $deleteFormData);
 
 	function handleColorSelect(selected: Selected<string> | undefined) {
 		if (selected) {
@@ -92,13 +89,15 @@
 						<Select.Group>
 							<Select.Label>Workspace Color</Select.Label>
 							{#each colors as color}
-								<div class="flex gap-2">
-									<div
-										class="my-auto size-3 flex-none rounded-full"
-										style="background-color: {color.value};"
-									></div>
-									<Select.Item value={color.value} label={color.label}>{color.label}</Select.Item>
-								</div>
+								<Select.Item value={color.value} label={color.label}
+									><div class="flex gap-2">
+										<div
+											class="my-auto size-3 flex-none rounded-full"
+											style="background-color: {color.value};"
+										></div>
+										{color.label}
+									</div></Select.Item
+								>
 							{/each}
 						</Select.Group>
 					</Select.Content>

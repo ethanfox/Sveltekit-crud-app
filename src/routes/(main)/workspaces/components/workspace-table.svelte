@@ -3,16 +3,7 @@
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
 	import Trash from 'lucide-svelte/icons/trash-2';
 	import AddUserToWorkspaceForm from './add-user-to-workspace-form.svelte';
-	import {
-		AlertDialog,
-		AlertDialogFooter,
-		AlertDialogTitle,
-		AlertDialogDescription,
-		AlertDialogContent,
-		AlertDialogHeader,
-		AlertDialogCancel,
-		AlertDialogAction
-	} from '$lib/components/ui/alert-dialog';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
@@ -96,34 +87,34 @@
 	{/if}
 </div>
 
-<AlertDialog bind:open={showDeleteAlert}>
-	<AlertDialogContent>
-		<AlertDialogHeader>
-			<AlertDialogTitle>Delete Workspace</AlertDialogTitle>
-			<AlertDialogDescription>
+<AlertDialog.Root bind:open={showDeleteAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Delete Workspace</AlertDialog.Title>
+			<AlertDialog.Description>
 				Are you sure you want to delete this workspace? This action cannot be undone.
-			</AlertDialogDescription>
-		</AlertDialogHeader>
+			</AlertDialog.Description>
+		</AlertDialog.Header>
 		<form method="POST" action="?/deleteWorkspace" id="deleteWorkspace" use:enhance>
 			<input type="hidden" name="workspaceId" value={currentWorkspaceId} />
-			<AlertDialogFooter>
-				<AlertDialogCancel on:click={() => (showDeleteAlert = false)}>Cancel</AlertDialogCancel>
-				<AlertDialogAction class="bg-red-800 text-white" type="submit">Delete</AlertDialogAction>
-			</AlertDialogFooter>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel on:click={() => (showDeleteAlert = false)}>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action class="bg-red-800 text-white" type="submit">Delete</AlertDialog.Action>
+			</AlertDialog.Footer>
 		</form>
-	</AlertDialogContent>
-</AlertDialog>
+	</AlertDialog.Content>
+</AlertDialog.Root>
 
-<AlertDialog bind:open={showAddToWorkSpaceAlert}>
-	<AlertDialogContent>
-		<AlertDialogHeader>
-			<AlertDialogTitle>Add to Workspace</AlertDialogTitle>
-		</AlertDialogHeader>
+<AlertDialog.Root bind:open={showAddToWorkSpaceAlert}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Add to Workspace</AlertDialog.Title>
+		</AlertDialog.Header>
 		<AddUserToWorkspaceForm
 			data={data.addUsersForm}
 			workspaceId={currentWorkspaceId}
 			users={data.users}
 			onSubmitSuccess={handleAddtoWorkspaceFormSubmit}
 		/>
-	</AlertDialogContent>
-</AlertDialog>
+	</AlertDialog.Content>
+</AlertDialog.Root>

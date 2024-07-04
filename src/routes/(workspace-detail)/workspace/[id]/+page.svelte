@@ -1,11 +1,8 @@
 <script lang="ts">
 	import WorkspaceDetailForm from '../../components/workspace-detail-form.svelte';
 	import { Separator } from '$lib/components/ui/separator';
+
 	export let data: any;
-
-	// console.log('DATA', data);
-	// let workspace = data?.workspace;
-
 	$: workspace = data.updateWorkspaceForm.data;
 </script>
 
@@ -23,8 +20,6 @@
 
 				<p class="text-slate-600">ID: {workspace.id}</p>
 			</div>
-
-			<!-- Add more user details here -->
 		{:else}
 			<p>Loading...</p>
 		{/if}

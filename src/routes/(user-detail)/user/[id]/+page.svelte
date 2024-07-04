@@ -1,27 +1,9 @@
 <script lang="ts">
 	import UserDetailForm from '../../components/user-detail-form.svelte';
-	import { superForm } from 'sveltekit-superforms';
 	import { Separator } from '$lib/components/ui/separator';
 
 	export let data: any;
-
-	let user = data?.user;
-
-	const {
-		form,
-		errors,
-		constraints,
-		enhance,
-		delayed,
-		message: formMessage
-	} = superForm(data.form, {
-		resetForm: false,
-		onUpdated(event) {
-			if (data?.user) {
-				user = data.user;
-			}
-		}
-	});
+	$: user = data.updateUserForm.data;
 </script>
 
 <div class="mx-auto my-8 flex max-w-3xl flex-col gap-4">
@@ -39,4 +21,4 @@
 	<Separator />
 </div>
 
-<UserDetailForm data={data.form} />
+<UserDetailForm data={data.updateUserForm} />
