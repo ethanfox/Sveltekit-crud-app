@@ -54,7 +54,7 @@
 		<Form.Field {form} name="userIds">
 			<Form.Control let:attrs>
 				<Form.Label>Select users to add to workspace</Form.Label>
-				<Form.FieldErrors>{$errors.userIds}</Form.FieldErrors>
+
 				<ScrollArea class="h-72 w-full rounded-md border p-4">
 					<div class="space-y-2">
 						{#each users as user}
