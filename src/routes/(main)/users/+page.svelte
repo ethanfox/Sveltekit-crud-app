@@ -21,27 +21,28 @@
 	<div class="space-y-6 rounded-md border p-4">
 		<div class="mb-4 flex w-full justify-between">
 			<h1 class="text-2xl font-semibold">Users</h1>
+			<div>
+				<AlertDialog.Root bind:open={showDialog}>
+					<AlertDialog.Trigger>
+						<Button>
+							<Plus class="mr-2 h-4 w-4" />
+							Create User
+						</Button>
+					</AlertDialog.Trigger>
 
-			<AlertDialog.Root bind:open={showDialog}>
-				<AlertDialog.Trigger>
-					<Button>
-						<Plus class="mr-2 h-4 w-4" />
-						Create User
-					</Button>
-				</AlertDialog.Trigger>
-
-				<AlertDialog.Content>
-					<AlertDialog.Header>
-						<AlertDialog.Title>Create User</AlertDialog.Title>
-						<AlertDialog.Description>Enter a name for the new user.</AlertDialog.Description>
-					</AlertDialog.Header>
-					<CreateUserForm
-						bind:this={createUserForm}
-						data={data.createUserForm}
-						onSubmitSuccess={handleFormSubmitted}
-					/>
-				</AlertDialog.Content>
-			</AlertDialog.Root>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Create User</AlertDialog.Title>
+							<AlertDialog.Description>Enter a name for the new user.</AlertDialog.Description>
+						</AlertDialog.Header>
+						<CreateUserForm
+							bind:this={createUserForm}
+							data={data.createUserForm}
+							onSubmitSuccess={handleFormSubmitted}
+						/>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+			</div>
 		</div>
 		<Table.Root>
 			<Table.Header>
@@ -55,9 +56,11 @@
 					<Table.Row on:click={() => goto(`/user/${user.id}`)}>
 						<Table.Cell class="font-medium">{user.id}</Table.Cell>
 						<Table.Cell>{user.name}</Table.Cell>
-						<div class="flex w-full justify-end py-2 pr-2">
-							<Button variant="secondary" class="my-auto">Manage</Button>
-						</div>
+						<Table.Cell class="w-[100px]">
+							<div class="flex w-full justify-end py-2 pr-2">
+								<Button variant="secondary" class="my-auto">Manage</Button>
+							</div>
+						</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>
