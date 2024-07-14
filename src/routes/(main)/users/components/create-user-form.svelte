@@ -6,9 +6,10 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { AlertDialogCancel } from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import type { z } from 'zod';
 
 	export let onSubmitSuccess: () => void;
-	export let data: SuperValidated<Infer<UserSchema>>;
+	export let data: SuperValidated<z.infer<typeof userSchema>>;
 
 	const form = superForm(data, {
 		validators: zodClient(userSchema),

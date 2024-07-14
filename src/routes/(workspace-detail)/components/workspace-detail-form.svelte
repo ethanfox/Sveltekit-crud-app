@@ -19,7 +19,7 @@
 		id: 'workspace-detail-form',
 		validators: zodClient(workspaceSchema),
 		onUpdated(event) {
-			data = event.form.data;
+			data.data = event.form.data;
 			$formData = event.form.data;
 		}
 	});

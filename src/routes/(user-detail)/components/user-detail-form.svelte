@@ -8,8 +8,9 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { goto } from '$app/navigation';
+	import { z } from 'zod';
 
-	export let data: SuperValidated<Infer<UserSchema>>;
+	export let data: SuperValidated<z.infer<typeof userSchema>>;
 
 	let showDeleteAlert = false;
 
@@ -17,7 +18,7 @@
 		id: 'user-detail-form',
 		validators: zodClient(userSchema),
 		onUpdated(event) {
-			data = event.form.data;
+			data.data = event.form.data;
 			$formData = event.form.data;
 		}
 	});

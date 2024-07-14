@@ -5,12 +5,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import AddUserToWorkspaceForm from './components/add-user-to-workspace-form.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-	import type { UserSchema } from '$lib/schemas';
+	import { userSchema, type UserSchema } from '$lib/schemas';
 
 	let { data } = $props();
 
-	let selectedUser: UserSchema | null = null;
-	console.log('DATA', data);
+	let selectedUser: UserSchema | null = $state(null);
 
 	let showRemoveAlert = $state(false);
 
@@ -20,7 +19,6 @@
 	}
 
 	function handleRemoveClick(user: UserSchema) {
-		console.log('Remove user', user);
 		selectedUser = user;
 		showRemoveAlert = true;
 	}
@@ -42,7 +40,7 @@
 			</Button>
 		</div>
 
-		{#if data.workspaceMembers?.users.length > 0 ?? false}
+		{#if data.workspaceMembers && data.workspaceMembers?.users?.length > 0}
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
@@ -55,13 +53,23 @@
 						<Table.Row>
 							<Table.Cell class="font-medium">{user.user.id}</Table.Cell>
 							<Table.Cell>{user.user.name}</Table.Cell>
-							<div class="flex w-full justify-end py-2 pr-2">
-								<Button
-									on:click={() => handleRemoveClick(user.user)}
-									variant="destructive"
-									class="my-auto">Remove</Button
-								>
-							</div>
+
+							<Table.Cell>
+								<div class="flex w-full justify-end py-2 pr-2">
+									<Button
+										on:click={() => {
+											const parsedUser = userSchema.safeParse(user.user);
+											if (parsedUser.success) {
+												handleRemoveClick(parsedUser.data);
+											} else {
+												console.error('Invalid user data:', user);
+												console.error('Invalid user data:', parsedUser.error);
+											}
+										}}
+										variant="destructive">Remove</Button
+									>
+								</div>
+							</Table.Cell>
 						</Table.Row>
 					{/each}
 				</Table.Body>

@@ -5,7 +5,8 @@ export const userSchema = z.object({
 	name: z.string()
 });
 // export type UserSchema = typeof userSchema;
-export type UserSchema = typeof userSchema;
+//export type UserSchema = typeof userSchema;
+export type UserSchema = z.infer<typeof userSchema>;
 
 export const workspaceSchema = z.object({
 	id: z.string(),
