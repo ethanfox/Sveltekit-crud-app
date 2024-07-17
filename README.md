@@ -1,4 +1,5 @@
-# Careswitch Take-Home Assignment
+# CRUD App with SvelteKit
+## Careswitch Take-Home Assignment
 
 Your assignment is to build a simple user management interface using SvelteKit, Prisma, Shadcn, and Tailwind that displays a list of users and supports navigating to individual profiles for viewing and editing. Follow the quickstart guide below to get started and learn more about the requirements.
 
