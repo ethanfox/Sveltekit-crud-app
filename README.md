@@ -1,9 +1,11 @@
 # CRUD App with SvelteKit
 ## Careswitch Take-Home Assignment
 
+
+### Assignment
 Your assignment is to build a simple user management interface using SvelteKit, Prisma, Shadcn, and Tailwind that displays a list of users and supports navigating to individual profiles for viewing and editing. Follow the quickstart guide below to get started and learn more about the requirements.
 
-## Prerequisites
+#### Prerequisites
 
 - [Node.js (LTS)](https://nodejs.org/en)
 - [VS Code](https://code.visualstudio.com/)
